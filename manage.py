@@ -27,7 +27,10 @@ def make_shell_context():
     return dict(app=main.app,
                 db=models.db,
                 User=models.User,
-                Post=models.Post)
+                Post=models.Post,
+                Comment=models.Comment,
+                Tag=models.Tag,
+                Posts_tags=models.posts_tags)
 
 if __name__ == '__main__':
     manager.run()

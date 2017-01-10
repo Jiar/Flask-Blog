@@ -1,0 +1,48 @@
+第6篇：
+
+from uuid import uuid4
+
+user = User(id=str(uuid4()), username='jmilkfan', password='fanguiju')
+db.session.add(user)
+db.session.commit()
+
+post_one = Post('First Post')
+post_one.id = str(uuid4())
+post_one.user_id = user.id
+db.session.add(post_one)
+db.session.commit()
+
+post_second = Post('Second Post')
+post_second.id = str(uuid4())
+post_second.users = user
+db.session.add(post_second)
+db.session.commit()
+
+第7篇：
+
+from uuid import uuid4
+user = db.session.query(User).first()
+posts = db.session.query(Post).all()
+post_one = posts[0]
+post_two = posts[1]
+
+tag_one = Tag('JmilkFan')
+tag_one.id = str(uuid4())
+tag_two = Tag('FanGuiju')
+tag_two.id = str(uuid4())
+tag_three = Tag('Flask')
+tag_three.id = str(uuid4())
+
+post_one.tags = [tag_two]
+post_two.tags = [tag_one, tag_two, tag_three]
+
+db.session.add(post_one)
+db.session.add(post_two)
+db.session.commit()
+
+comment_one = Comment('this is comment')
+comment_one.id = str(uuid4())
+post_one.comments.append(comment_one)
+db.session.add(comment_one)
+db.session.commit()
+
