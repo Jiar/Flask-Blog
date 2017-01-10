@@ -4,9 +4,6 @@
 # Created by jiar on 2016/12/27.
 # Github: https://github.com/Jiar/
 
-# import Flask Script object
-# from flask.ext.script import Manager, Server
-
 from flask_script import Manager, Server
 
 import main

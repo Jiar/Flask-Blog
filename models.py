@@ -5,6 +5,7 @@
 # Github: https://github.com/Jiar/
 
 from flask_sqlalchemy import SQLAlchemy
+
 from main import app
 
 # INIT the sqlalchemy object
@@ -39,7 +40,7 @@ class Post(db.Model):
     """Represents Proected posts."""
 
     __tablename__ = 'posts'
-    id = db.Column(db.String(45), promary_key=True)
+    id = db.Column(db.String(45), primary_key=True)
     title = db.Column(db.String(255))
     text = db.Column(db.Text())
     publish_date = db.Column(db.DateTime)
