@@ -4,11 +4,11 @@
 # Created by jiar on 2016/12/27.
 # Github: https://github.com/Jiar/
 
-import random
 import datetime
 from uuid import uuid4
 
-from models import db, User, Tag, Post
+import random
+from FlaskBlog.models import db, User, Tag, Post
 
 user = User(id=str(uuid4()), username='jmilkfan', password='fanguiju')
 db.session.add(user)

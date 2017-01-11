@@ -4,20 +4,19 @@
 # Created by jiar on 2016/12/27.
 # Github: https://github.com/Jiar/
 
-from flask_script import Manager, Server
+from FlaskBlog import app, models
 from flask_migrate import Migrate, MigrateCommand
-
-import main
-import models
+from flask_script import Manager, Server
 
 # Init manager object via app object
-manager = Manager(main.app)
+manager = Manager(app)
 
 # Init migrate object via app and db object
-migrate = Migrate(main.app, models.db)
+# migrate = Migrate(app, models.db)
 
 # Create a new commands: server
 # This command will be run the Flask development_env server
+# manager.add_command("server", Server(host='127.0.0.1', port=8089))
 manager.add_command("server", Server())
 manager.add_command("db", MigrateCommand)
 
@@ -29,7 +28,7 @@ def make_shell_context():
     type: `Dict`
     """
     # 确保有导入 Flask app object，否则启动的 CLI 上下文中仍然没有 app 对象
-    return dict(app=main.app,
+    return dict(app=app,
                 db=models.db,
                 User=models.User,
                 Post=models.Post,

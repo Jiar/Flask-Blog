@@ -7,6 +7,7 @@
 class Config(object):
     """Base config class."""
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SECRET_KEY = 'www.jiar.vip|www.jiar.vip'
 
 class ProdConfig(Config):
     """Production config class."""

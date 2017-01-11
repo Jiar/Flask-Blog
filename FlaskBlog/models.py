@@ -6,7 +6,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 
-from main import app
+from . import app
 
 # INIT the sqlalchemy object
 # Will be load the SQLALCHEMY_DATABASE_URL from config.py
@@ -92,7 +92,8 @@ class Comment(db.Model):
     date = db.Column(db.DateTime())
     post_id = db.Column(db.String(45), db.ForeignKey('posts.id'))
 
-    def __init__(self, name):
+    def __init__(self, id, name):
+        self.id = id
         self.name = name
 
     def __repr__(self):
