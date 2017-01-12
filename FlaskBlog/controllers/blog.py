@@ -16,7 +16,7 @@ from ..forms import CommentForm
 
 # blog_blueprint = Blueprint('blog', __name__)
 # blog_blueprint = Blueprint('blog', __name__, url_prefix='/blog', template_folder=path.join('templates/blog'))
-blog_blueprint = Blueprint('blog', __name__, url_prefix='/blog', static_folder='static', template_folder='templates/blog')
+blog_blueprint = Blueprint('blog', __name__, url_prefix='/blog', static_folder='static', template_folder='templates')
 # blog_blueprint = Blueprint(
 #     'blog',
 #     __name__,
