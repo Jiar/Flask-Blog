@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from . import app
 
+from .extensions import bcrypt
+
 # INIT the sqlalchemy object
 # Will be load the SQLALCHEMY_DATABASE_URL from config.py
 # SQLAlchemy 会自动的从 app 对象中的 DevConfig 中加载连接数据库的配置项
@@ -35,6 +37,13 @@ class User(db.Model):
     def __repr__(self):
         """Define the string format for instance of User."""
         return "<Model User `{}`>".format(self.username)
+
+    def set_password(self, password):
+        """Convert the password to cryptograph via flask-bcrypt"""
+        return bcrypt.generate_password_hash(password)
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
 
 posts_tags = db.Table('posts_tags',
     db.Column('post_id', db.String(45), db.ForeignKey('posts.id')),
