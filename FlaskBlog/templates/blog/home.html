@@ -1,11 +1,26 @@
 <!-- Replace the TITLE of template base.html -->
-{% extends "base.html"%}
+{% extends "./base.html"%}
 {% block title %}Jiar's Blog{% endblock %}
 
 <!-- Replace the BODY of template base.html -->
 {% block body %}
 <!-- The data object from view function: `home()` -->
 <div class="row">
+  <div class="col-lg-6">
+    <p>Written By <a href="{{ url_for('blog.user', username=post.users.username)
+      }}">{{ post.users.username }}</a> on {{ post.publish_date }}</p>
+    <p>{{ post.text | safe }}</p>
+  </div>
+  <div class="column">
+    <div class="col-lg-2">
+      <a href="{{ url_for('blog.new_post') }}" class="btn btn-primary">New</a>
+    </div>
+  </div>
+  <div class="column">
+    <div class="col-lg-2">
+      <a href="{{ url_for('blog.edit_post', id=post.id) }}" class="btn btn-primary">Edit</a>
+    </div>
+  </div>
   <div class="col-lg-9">
     <!-- Get Pagination object-->
     {% for post in posts.items %}
@@ -20,7 +35,7 @@
           <br/><br/>
         <!-- Set the link for read more -->
         <a href="{{
-          url_for('post', post_id=post.id)
+          url_for('blog.post', post_id=post.id)
           }}">Read More</a>
       </div>
     </div>
@@ -33,7 +48,7 @@
         {% for post in recent %}
         <!-- Set the link for recent posts. -->
         <li><a href="{{
-          url_for('post', post_id=post.id)
+          url_for('blog.post', post_id=post.id)
           }}">{{ post.title }}</a></li>
         {% endfor %}
       </ul>
@@ -43,13 +58,13 @@
       <ul>
         {% for tag in top_tags %}
         <li><a href="{{
-          url_for('tag', tag_name=tag[0].name)
+          url_for('blog.tag', tag_name=tag[0].name)
           }}">{{ tag[0].name }}</a></li>
         {% endfor %}
       </ul>
     </div>
   </div>
   <!-- Call the Macro: `render_pagination` from base.html -->
-  {{ render_pagination(posts, 'home') }}
+  {{ render_pagination(posts, 'blog.home') }}
 </div>
 {% endblock %}

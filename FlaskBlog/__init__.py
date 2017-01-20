@@ -31,7 +31,7 @@ from flask import Flask, redirect, url_for
 app = Flask(__name__)
 
 from .models import db
-from .controllers import blog
+from .controllers import blog, main
 from .extensions import bcrypt
 
 def create_app(object_name):
@@ -53,5 +53,6 @@ def create_app(object_name):
 
     # Register the Blueprint into app object
     app.register_blueprint(blog.blog_blueprint)
+    app.register_blueprint(main.main_blueprint)
 
     return app

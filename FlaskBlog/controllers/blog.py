@@ -8,23 +8,13 @@ import datetime
 from os import path
 from uuid import uuid4
 
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, redirect, url_for
 from sqlalchemy import func
 
 from ..models import db, User, Post, Tag, Comment, posts_tags
-from ..forms import CommentForm
+from ..forms import CommentForm, PostForm
 
-# blog_blueprint = Blueprint('blog', __name__)
-# blog_blueprint = Blueprint('blog', __name__, url_prefix='/blog', template_folder=path.join('templates/blog'))
-blog_blueprint = Blueprint('blog', __name__, url_prefix='/blog', static_folder='static', template_folder='templates')
-# blog_blueprint = Blueprint(
-#     'blog',
-#     __name__,
-#     # path.pardir ==> ..
-#     template_folder=path.join(path.pardir, 'templates', 'blog'),
-#     # Prefix of Route URL
-#     url_prefix='/blog')
-
+blog_blueprint = Blueprint('blog', __name__, url_prefix='/blog')
 
 def sidebar_data():
     """Set the sidebar function."""
@@ -54,7 +44,7 @@ def home(page=1):
 
     recent, top_tags = sidebar_data()
 
-    return render_template('home.html',
+    return render_template('blog/home.html',
                            posts=posts,
                            recent=recent,
                            top_tags=top_tags)
@@ -83,7 +73,7 @@ def post(post_id):
     comments = post.comments.order_by(Comment.date.desc()).all()
     recent, top_tags = sidebar_data()
 
-    return render_template('post.html',
+    return render_template('blog/post.html',
                            post=post,
                            tags=tags,
                            comments=comments,
@@ -100,7 +90,7 @@ def tag(tag_name):
     posts = tag.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
 
-    return render_template('tag.html',
+    return render_template('blog/tag.html',
                            tag=tag,
                            posts=posts,
                            recent=recent,
@@ -114,8 +104,47 @@ def user(username):
     posts = user.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
 
-    return render_template('user.html',
+    return render_template('blog/user.html',
                            user=user,
                            posts=posts,
                            recent=recent,
                            top_tags=top_tags)
+
+@blog_blueprint.route('/new', methods=['GET', 'POST'])
+def new_post():
+    """View function for new_port."""
+    form = PostForm()
+
+    if form.validate_on_submit():
+        new_post = Post(id=str(uuid4()), title=form.title.data)
+        new_post.text = form.text.data
+        new_post.publish_date = datetime.now()
+
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('blog.home'))
+
+    return render_template('blog/new_post.html',
+                           form=form)
+
+
+@blog_blueprint.route('/edit/<string:id>', methods=['GET', 'POST'])
+def edit_post(id):
+    """View function for edit_post."""
+
+    post = Post.query.get_or_404(id)
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.text = form.text.data
+        post.publish_date = datetime.now()
+
+        # Update the post
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('blog.post', post_id=post.id))
+
+    form.title.data = post.title
+    form.text.data = post.text
+    return render_template('blog/edit_post.html', form=form, post=post)

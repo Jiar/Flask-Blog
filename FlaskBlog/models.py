@@ -10,6 +10,9 @@ from . import app
 
 from .extensions import bcrypt
 
+from flask_login import AnonymousUserMixin
+
+
 # INIT the sqlalchemy object
 # Will be load the SQLALCHEMY_DATABASE_URL from config.py
 # SQLAlchemy 会自动的从 app 对象中的 DevConfig 中加载连接数据库的配置项
@@ -44,6 +47,34 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+    def is_authenticated(self):
+        """Check the user whether logged in."""
+
+        # Check the User's instance whether Class AnonymousUserMixin's instance.
+        if isinstance(self, AnonymousUserMixin):
+            return False
+        else:
+            return True
+
+    def is_active(self):
+        """Check the user whether pass the activation process."""
+
+        return True
+
+    def is_anonymous(self):
+        """Check the user's login status whether is anonymous."""
+
+        if isinstance(self, AnonymousUserMixin):
+            return True
+        else:
+            return False
+
+    def get_id(self):
+        """Get the user's uuid from database."""
+
+        return self.id.decode('utf-8')
+
 
 posts_tags = db.Table('posts_tags',
     db.Column('post_id', db.String(45), db.ForeignKey('posts.id')),
